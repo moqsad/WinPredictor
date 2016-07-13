@@ -4,9 +4,9 @@ import os.path
 import numpy as np
 
 num = 1
-for i in range(211028,967082):
-    if os.path.isfile('G:\\Google Drive\\Class file\\Current\\Me\\Project300\\Data\\T20s\\'+str(i)+'.yaml'):
-        with open('G:\\Google Drive\\Class file\\Current\\Me\\Project300\\Data\\T20s\\'+str(i)+'.yaml') as fileName:
+for i in range(211028,1007660):
+    if os.path.isfile('G:\\Google Drive\\Class file\Current\\Me\\Project300\\Data Analysis\\t20s_male\\'+str(i)+'.yaml'):
+        with open('G:\\Google Drive\\Class file\Current\\Me\\Project300\\Data Analysis\\t20s_male\\'+str(i)+'.yaml') as fileName:
             data = yaml.load(fileName)
             fileName.close()
 
@@ -33,7 +33,7 @@ for i in range(211028,967082):
 
             #player_of_match = data['info']['player_of_match'][0]
             #city = data['info']['city']
-            umpires = data['info']['umpires']
+
             dates = data['info']['dates'][0]
             venue = data['info']['venue']
             teams = ' vs '.join(data['info']['teams'])
@@ -55,11 +55,13 @@ for i in range(211028,967082):
                 require ball, team, batsman, bowler, runs, team run,
             '''
             ball_list, batsman_run_list, team_total_list, total_run_list, striker_list, non_striker_list, bowler_list, innings_list, striker_run_list, \
-            non_striker_run_list, striker_ball_list, non_striker_ball_list, player_out_list, wicket_list = \
-                [[], [], [], [], [], [], [], [], [], [], [], [], [], []]
+            non_striker_run_list, striker_ball_list, non_striker_ball_list, player_out_list, wicket_list, bowling_extras_list, extras_list = \
+                [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
 
             team_one_total = 0
             team_one_wicket = 0
+            extras = 0
+            bowling_extras = 0
             for k in firstInningsDeliveryData:
                 #print(list(k.keys())[0])
                 ball = list(k.keys())[0]
@@ -87,8 +89,26 @@ for i in range(211028,967082):
                 except:
                     player_out = '0'
 
+
                 player_out_list.append(player_out)
                 wicket_list.append(team_one_wicket)
+
+                try:
+                    if k[ball]['extras']['wides']:
+                        bowling_extras += 1
+                except:
+                    try:
+                        if k[ball]['extras']['noballs']:
+                            bowling_extras += 1
+                    except:
+                        notneeded1 = 0
+
+                extras += k[ball]['runs']['extras']
+
+
+                bowling_extras_list.append(bowling_extras)
+                extras_list.append(extras)
+
 
                 striker_run = 0
                 non_striker_run = 0
@@ -121,8 +141,11 @@ for i in range(211028,967082):
                 striker_ball_list.append(striker_ball) #new
                 non_striker_ball_list.append(non_striker_ball) #new
 
+
             team_two_total = 0
             team_two_wicket = 0
+            extras = 0
+            bowling_extras = 0
             for k in secondInningsDeliveryData:
                 #print(list(k.keys())[0])
                 ball = list(k.keys())[0]
@@ -151,6 +174,22 @@ for i in range(211028,967082):
 
                 player_out_list.append(player_out)
                 wicket_list.append(team_two_wicket)
+
+                try:
+                    if k[ball]['extras']['wides']:
+                        bowling_extras += 1
+                except:
+                    try:
+                        if k[ball]['extras']['noballs']:
+                            bowling_extras += 1
+                    except:
+                        notneeded2 = 0
+
+                extras += k[ball]['runs']['extras']
+
+
+                bowling_extras_list.append(bowling_extras)
+                extras_list.append(extras)
 
                 striker_run = 0
                 non_striker_run = 0
@@ -204,11 +243,13 @@ for i in range(211028,967082):
                 'Wicket': pd.Series(player_out_list),  #new
                 'Total Wicket': pd.Series(wicket_list),  #new
                 'Winner/Result': result,  # new
-                'Date': str(dates)  # new
+                'Date': str(dates),  # new
+                'Extras': pd.Series(extras_list),
+                'Bowling Extras': pd.Series(bowling_extras_list)
                 })
 
             #print(data_set)
-            folder = 'G:\\Google Drive\\Class file\\Current\\Me\\Project300\\Data\\T20sFormatted\\'
+            folder = 'G:\\Google Drive\\Class file\\Current\\Me\\Project300\\Data Analysis\\t20s_maleCSV\\'
             file_name = folder + str(num) + '.csv'
             data_set.to_csv(file_name,encoding='utf-8')
             num += 1
