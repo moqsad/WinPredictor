@@ -111,6 +111,7 @@ for value in range(1,505):
     reader = csv.reader(file)
 
     position_find(reader)
+    print(team1_pos, team2_pos)
 
     run1 = 0
     run2 = 0
@@ -160,7 +161,7 @@ for value in range(1,505):
         toss = line[toss_index]
         winner = line[winner_index]
         break
-
+    #print(decision, toss, winner)
 
     if decision == 'bat':
         if toss == team_name_list[team1_pos]:
@@ -195,7 +196,7 @@ for value in range(1,505):
             run_korce_list[team1_pos] += run2 - extras2
     else:
 
-        if toss != team_name_list[team1_pos]:
+        if toss == team_name_list[team1_pos]:  #Something wrong was happened not equal sign...........
             wicket_nice_list[team2_pos] += wicket2
             over_korce_list[team2_pos] += over2
             run_dice_list[team2_pos] += run2 - (extras2 - bowling_extras2)
@@ -223,6 +224,8 @@ for value in range(1,505):
             wicket_haraice_list[team2_pos] += wicket2
             over_khelce_list[team2_pos] += over2
             run_korce_list[team2_pos] += run2 - extras2
+
+    print(value, team_name_list[team1_pos], team_name_list[team2_pos])
 
     no_of_match_list[team1_pos] += 1
     no_of_match_list[team2_pos] += 1
@@ -264,7 +267,6 @@ data_set = pd.DataFrame({
     'Winning Percentage': pd.Series(winning_percent_list),
     'No Of Matches': pd.Series(no_of_match_list)
 })
-
 
 # print(data_set)
 folder = 'G:\\Google Drive\\Class file\\Current\\Me\\Project300\\Data Analysis\\t20s_maleCSV\\'
