@@ -102,7 +102,7 @@ pie(fracs, explode=explode, labels=labels,
                 # everything is rotated counter-clockwise by 90 degrees,
                 # so the plotting starts on the positive y-axis.
 
-title('Effect of Batting economy', bbox={'facecolor':'0.8', 'pad':5})
+title('Effect of Economy', bbox={'facecolor':'0.8', 'pad':5})
 
 show()
 
